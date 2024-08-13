@@ -1,5 +1,11 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: webflux-playground
-server:
-  port: 8080
+  sql:
+    init:
+      data-locations: classpath:sql/data.sql
+
+section: section02

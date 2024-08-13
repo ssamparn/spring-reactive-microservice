@@ -1,4 +1,4 @@
-package com.reactive.microservice.webfluxplayground.sec01;
+package com.reactive.microservice.webfluxplayground.section01;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
