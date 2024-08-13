@@ -1,0 +1,12 @@
+services:
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=customer
+    volumes:
+      - ./db:/var/lib/postgresql/data
+      - ./sql/customer.sql:/docker-entrypoint-initdb.d/customer.sql
