@@ -2,9 +2,10 @@ package com.reactive.microservice.webfluxplayground.validator;
 
 import com.reactive.microservice.webfluxplayground.exceptions.ApplicationExceptions;
 import com.reactive.microservice.webfluxplayground.model.CustomerModel;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
@@ -12,13 +13,11 @@ import java.util.regex.Pattern;
 public class RequestValidator {
 
     private static Predicate<CustomerModel> hasName() {
-        return customer -> StringUtils.hasLength(customer.name());
+        return customer -> StringUtils.isNotEmpty(customer.name());
     }
 
     private static Predicate<CustomerModel> hasValidEmail() {
-        return customer -> Pattern.compile("^(.+)@(\\S+)$")
-                .matcher(customer.email())
-                .matches();
+        return customer -> !Objects.isNull(customer.email()) && Pattern.compile("^(.+)@(\\S+)$").matcher(customer.email()).matches();
     }
 
     public static UnaryOperator<Mono<CustomerModel>> validate() {

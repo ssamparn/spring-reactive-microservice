@@ -3,7 +3,6 @@ package com.reactive.microservice.webfluxplayground.controller;
 import com.reactive.microservice.webfluxplayground.AbstractTest;
 import com.reactive.microservice.webfluxplayground.model.CustomerModel;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -128,8 +127,7 @@ public class CustomerControllerTest extends AbstractTest {
     }
 
     @Test
-    @Disabled
-    public void invalidInput(){
+    public void invalidInput() {
         // missing name
         CustomerModel missingName = new CustomerModel (null, null, "noel@gmail.com");
         this.webTestClient.post()
