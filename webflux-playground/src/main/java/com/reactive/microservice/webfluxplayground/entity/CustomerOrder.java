@@ -1,4 +1,4 @@
-package com.reactive.microservice.webfluxplayground.section02.entity;
+package com.reactive.microservice.webfluxplayground.entity;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.reactive.microservice.webfluxplayground.section02.model;
+package com.reactive.microservice.webfluxplayground.model;
 
 import java.time.Instant;
 import java.util.UUID;

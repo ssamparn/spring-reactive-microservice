@@ -1,8 +1,8 @@
-package com.reactive.microservice.webfluxplayground.section02.repository;
+package com.reactive.microservice.webfluxplayground.repository;
 
-import com.reactive.microservice.webfluxplayground.section02.entity.CustomerOrder;
-import com.reactive.microservice.webfluxplayground.section02.entity.Product;
-import com.reactive.microservice.webfluxplayground.section02.model.OrderDetails;
+import com.reactive.microservice.webfluxplayground.entity.CustomerOrder;
+import com.reactive.microservice.webfluxplayground.entity.Product;
+import com.reactive.microservice.webfluxplayground.model.OrderDetails;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;

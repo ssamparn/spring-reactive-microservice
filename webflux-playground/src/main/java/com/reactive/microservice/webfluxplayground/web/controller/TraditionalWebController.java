@@ -1,5 +1,6 @@
-package com.reactive.microservice.webfluxplayground.section01;
+package com.reactive.microservice.webfluxplayground.web.controller;
 
+import com.reactive.microservice.webfluxplayground.model.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,6 +1,6 @@
-package com.reactive.microservice.webfluxplayground.section02.repository;
+package com.reactive.microservice.webfluxplayground.repository;
 
-import com.reactive.microservice.webfluxplayground.section02.entity.Product;
+import com.reactive.microservice.webfluxplayground.entity.Product;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;

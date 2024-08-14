@@ -7,5 +7,3 @@ spring:
   sql:
     init:
       data-locations: classpath:sql/data.sql
-
-section: section02
