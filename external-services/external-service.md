@@ -3,6 +3,7 @@
 ## How To Run
 
 ```bash
+$ cd external-services/
 $ java -jar external-services.jar
 ```
 - It uses port `7070` by default.
