@@ -9,6 +9,9 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static com.reactive.microservice.webfluxplayground.util.TestUtil.onComplete;
 import static com.reactive.microservice.webfluxplayground.util.TestUtil.onError;
@@ -104,5 +107,41 @@ public class MonoClientTest extends AbstractWebClient {
                 .verify();
     }
 
+    /* *
+     * Demo simple GET request with mandatory header caller-id
+     * */
+    @Test
+    public void getProductWithMandatoryHeaderMono() {
+        this.client.get()
+                .uri(uriBuilder -> uriBuilder.path("/lec04/product/{productId}").build(1))
+                .headers(headers -> headers.add("caller-id", UUID.randomUUID().toString()))
+                .retrieve()
+                .bodyToMono(Product.class)
+                .doOnNext(onNext())
+                .then()
+                .as(StepVerifier::create)
+                .expectComplete()
+                .verify();
+    }
 
+    /* *
+     * Demo simple GET request with mandatory header caller-id sent as a Map
+     * */
+    @Test
+    public void getProductWithMandatoryHeaderAsMapMono() {
+        Map<String, String> headersMap = new LinkedHashMap<>();
+        headersMap.put("caller-id", UUID.randomUUID().toString());
+        headersMap.put("some-key", "some-value");
+
+        this.client.get()
+                .uri(uriBuilder -> uriBuilder.path("/lec04/product/{productId}").build(1))
+                .headers(headers -> headers.setAll(headersMap))
+                .retrieve()
+                .bodyToMono(Product.class)
+                .doOnNext(onNext())
+                .then()
+                .as(StepVerifier::create)
+                .expectComplete()
+                .verify();
+    }
 }
