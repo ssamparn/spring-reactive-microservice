@@ -15,6 +15,8 @@ public class FluxClientTest extends AbstractWebClient {
 
     /* *
      * Demo GET requests receiving streaming response
+     * GET: http://localhost:7070/demo02/lec02/product/stream
+     * Provide product details as stream - 1 to 10. 500ms delay for each item.
      * */
     @Test
     public void getProductStreams() {
