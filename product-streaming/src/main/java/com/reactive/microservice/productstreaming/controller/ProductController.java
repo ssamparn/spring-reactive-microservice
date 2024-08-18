@@ -1,6 +1,19 @@
 package com.reactive.microservice.productstreaming.controller;
 
+import com.reactive.microservice.productstreaming.service.ProductService;
+import com.reactive.microservice.productstreaming.model.ProductModel;
+import com.reactive.microservice.productstreaming.model.UploadResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.UUID;
 
 /* *
  * Streaming: We will be doing Service => Service communication
@@ -34,7 +47,25 @@ import org.springframework.web.bind.annotation.RestController;
  *  - Each line id 1 JSON object, which is self-contained, easier to parse (without getting out-of-memory exception), great for streaming and can easily handle massive data sets.
  *  - JSON Array is good for smaller and related data. e.g: Reviews for a product, but for larger data sets JSON Line Format is recommended.
  * */
+
+@Slf4j
 @RestController
+@RequestMapping("/products")
+@RequiredArgsConstructor
 public class ProductController {
 
+    private final ProductService productService;
+
+    /* *
+     * We are expecting a stream of product (json) objects to be uploaded as it is a bulk upload.
+     * If you observe clearly, the endpoint is invoked once (that means the connection is established once), but products are being uploaded every second in a streaming fashion.
+     * By using this technique, by invoking the post request only once, we can upload millions of products to the remote server
+     * */
+    @PostMapping(value = "/upload", consumes = MediaType.APPLICATION_NDJSON_VALUE)
+    public Mono<UploadResponse> uploadProducts(@RequestBody Flux<ProductModel> productModelFlux) {
+        log.info("upload product service invoked");
+        return this.productService.saveProducts(productModelFlux.doOnNext(requestBody -> log.info("incoming request body: {}", requestBody)))
+                .then(productService.getProductsCount())
+                .map(productCount -> new UploadResponse(UUID.randomUUID(), productCount));
+    }
 }
