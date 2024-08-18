@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,4 +77,33 @@ public class ProductController {
         log.info("download product service invoked");
         return this.productService.getProducts();
     }
+
+    /* *
+     * Server Sent Events (SSE): We saw how we can stream events for Service => Service communication.
+     * But what about Server to Browser Communication.
+     *
+     * Server Sent Events is the solution for streaming events from backend to frontend.
+     * It's a one way communication.
+     *
+     * Flux<T>
+     * MediaType.APPLICATION_NDJSON_VALUE => service to service communication
+     * MediaType.TEXT_EVENT_STREAM_VALUE => service to browser communication
+     *
+     * To demo SSE lets consider a use-case where users want to know new product update. That means as soon as a product get uploaded we want to send an event to front end.
+     * */
+
+    @PostMapping
+    public Mono<ProductModel> saveProduct(@RequestBody Mono<ProductModel> productModelMono) {
+        log.info("new product !!");
+        return this.productService.saveProduct(productModelMono);
+    }
+
+    @GetMapping(value = "/stream/{maxPrice}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ProductModel> streamProducts(@PathVariable(value = "maxPrice", required = false) Integer maxPrice) {
+        log.info("new product notification via sse");
+        return this.productService.productStream()
+                .filter(model -> model.price() <= maxPrice)
+                .doOnNext(model -> log.info("product emitted via sse: {}", model));
+    }
+
 }

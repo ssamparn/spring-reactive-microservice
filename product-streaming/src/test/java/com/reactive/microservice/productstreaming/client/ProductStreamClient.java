@@ -32,4 +32,21 @@ public class ProductStreamClient {
                 .retrieve()
                 .bodyToFlux(ProductModel.class);
     }
+
+    public Mono<ProductModel> saveProduct(Mono<ProductModel> productModelMono) {
+        return this.productStreamClient.post()
+                .uri("/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(productModelMono, ProductModel.class)
+                .retrieve()
+                .bodyToMono(ProductModel.class);
+    }
+
+    public Flux<ProductModel> streamProducts(Integer maxPrice) {
+        return this.productStreamClient.get()
+                .uri("/products/stream/{maxPrice}", maxPrice)
+                .accept(MediaType.TEXT_EVENT_STREAM)
+                .retrieve()
+                .bodyToFlux(ProductModel.class);
+    }
 }
