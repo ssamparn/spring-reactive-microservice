@@ -16,6 +16,7 @@
   <modules>
     <module>webflux-playground</module>
     <module>r2dbc-vs-jdbc</module>
+    <module>product-streaming</module>
   </modules>
 
 </project>

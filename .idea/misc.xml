@@ -9,6 +9,7 @@
         <option value="$PROJECT_DIR$/r2dbc-vs-jdbc/pom.xml" />
         <option value="$PROJECT_DIR$/r2dbc-vs-jdbc/reactive-r2dbc/pom.xml" />
         <option value="$PROJECT_DIR$/r2dbc-vs-jdbc/traditional-jdbc/pom.xml" />
+        <option value="$PROJECT_DIR$/product-streaming/pom.xml" />
       </list>
     </option>
   </component>
