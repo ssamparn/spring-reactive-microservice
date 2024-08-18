@@ -4,9 +4,10 @@ import com.reactive.microservice.webfluxplayground.AbstractWebClient;
 import com.reactive.microservice.webfluxplayground.client.model.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.reactive.function.client.ClientRequest;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.UUID;
@@ -71,13 +72,11 @@ public class AuthClientTest extends AbstractWebClient {
      * */
     @Test
     public void bearerTokenWithExchangeFilterFunctionProductService() {
-        WebClient client = createWebClient(f -> f.filter((request, next) ->
-                next.exchange(withFreshBearerAuth(request, UUID.randomUUID().toString()))));
+        WebClient client = createWebClient(f -> f.filter(tokenGenerator()));
 
         client
             .get()
-            .uri(uriBuilder -> uriBuilder.path("/lec08/product/{productId}").build(1))
-            .headers(headers -> headers.setBearerAuth("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"))
+            .uri(uriBuilder -> uriBuilder.path("/lec09/product/{productId}").build(1))
             .retrieve()
             .bodyToMono(Product.class)
             .doOnNext(onNext())
@@ -87,9 +86,80 @@ public class AuthClientTest extends AbstractWebClient {
             .verify();
     }
 
-    private static ClientRequest withFreshBearerAuth(ClientRequest request, String token) {
-        return ClientRequest.from(request)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .build();
+    /**
+     * Assignment: Create an ExchangeFilterFunction to log Http Request Method and the Url that WebClient making requests to.
+     *             Also log the Response Status Code.
+     * */
+    @Test
+    public void logHttpMethodAndUrlExchangeFilterFunctionProductService() {
+        WebClient client = createWebClient(f -> f
+                .filter(tokenGenerator())
+                .filter(logRequests())
+                .filter(logResponses()));
+
+        client
+                .get()
+                .uri(uriBuilder -> uriBuilder.path("/lec09/product/{productId}").build(1))
+                .retrieve()
+                .bodyToMono(Product.class)
+                .doOnNext(onNext())
+                .then()
+                .as(StepVerifier::create)
+                .expectComplete()
+                .verify();
     }
+
+    /* *
+     * WebClient Attribute Demo:
+     *  1. One filter function can pass some information to another filter function using WebClient attributes.
+     *  2. We can also pass these attributes from the service classes.
+     *
+     * e.g: In the below example we can decide at the service layer itself if we want to log the request details or not.
+     * */
+    @Test
+    public void webClientAttributeExchangeFilterFunctionProductService() {
+        WebClient client = createWebClient(f -> f
+                .filter(tokenGenerator())
+                .filter(logRequests())
+                .filter(logResponses()));
+
+        client
+                .get()
+                .uri(uriBuilder -> uriBuilder.path("/lec09/product/{productId}").build(1))
+                .attribute("enable-logging", true)
+                .retrieve()
+                .bodyToMono(Product.class)
+                .doOnNext(onNext())
+                .then()
+                .as(StepVerifier::create)
+                .expectComplete()
+                .verify();
+    }
+
+    private ExchangeFilterFunction tokenGenerator() {
+        return (request, next) -> {
+            String token = UUID.randomUUID().toString().replace("-", "");
+            log.info("generated token: {}", token);
+            ClientRequest decoratedRequest = ClientRequest.from(request).headers(h -> h.setBearerAuth(token)).build();
+            return next.exchange(decoratedRequest);
+        };
+    }
+
+    private ExchangeFilterFunction logRequests() {
+        return ((request, next) -> {
+            boolean isLoggingEnabled = (Boolean) request.attributes().getOrDefault("enable-logging", false);
+            if (isLoggingEnabled) {
+                log.info("Request: {} {}", request.method(), request.url());
+            }
+            return next.exchange(request);
+        });
+    }
+
+    private ExchangeFilterFunction logResponses() {
+        return ExchangeFilterFunction.ofResponseProcessor(response -> {
+            log.info("Response status code: {}", response.statusCode());
+            return Mono.just(response);
+        });
+    }
+
 }
