@@ -6,6 +6,7 @@ import com.reactive.microservice.productstreaming.model.UploadResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,8 +65,15 @@ public class ProductController {
     @PostMapping(value = "/upload", consumes = MediaType.APPLICATION_NDJSON_VALUE)
     public Mono<UploadResponse> uploadProducts(@RequestBody Flux<ProductModel> productModelFlux) {
         log.info("upload product service invoked");
-        return this.productService.saveProducts(productModelFlux.doOnNext(requestBody -> log.info("incoming request body: {}", requestBody)))
+        return this.productService
+                .saveProducts(productModelFlux) // .doOnNext(requestBody -> log.info("incoming request body: {}", requestBody)))
                 .then(productService.getProductsCount())
                 .map(productCount -> new UploadResponse(UUID.randomUUID(), productCount));
+    }
+
+    @GetMapping(value = "/download", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    public Flux<ProductModel> downloadProducts() {
+        log.info("download product service invoked");
+        return this.productService.getProducts();
     }
 }

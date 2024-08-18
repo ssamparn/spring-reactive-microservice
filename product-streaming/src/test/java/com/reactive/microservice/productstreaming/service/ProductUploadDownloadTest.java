@@ -2,12 +2,14 @@ package com.reactive.microservice.productstreaming.service;
 
 import com.reactive.microservice.productstreaming.client.ProductStreamClient;
 import com.reactive.microservice.productstreaming.model.ProductModel;
+import com.reactive.microservice.productstreaming.util.FileWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -58,4 +60,44 @@ public class ProductUploadDownloadTest {
                 .verify();
     }
 
+    /**
+     * 1 Million products upload - Demo
+     * */
+    @Test
+    public void uploadMillionProductTest() {
+        Flux<ProductModel> productModelFlux = Flux.range(1, 1_000_000)
+                .map(i -> new ProductModel(null, "product-" + i, ThreadLocalRandom.current().nextInt()));
+
+        productStreamClient
+                .uploadProducts(productModelFlux)
+                .doOnNext(onNext())
+                .then()
+                .as(StepVerifier::create)
+                .expectComplete()
+                .verify();
+    }
+
+    /* *
+     * Download all products and write it to a file
+     * */
+    @Test
+    public void downloadMillionProductTest() {
+        Flux<ProductModel> productModelFlux = Flux.range(1, 1_000_000)
+                .map(i -> new ProductModel(null, "product-" + i, ThreadLocalRandom.current().nextInt()));
+
+        /* *
+         * Since spring creates a new context each time a test starts, it writes only default number of products to the file.
+         * If we have to download all 1 million products and write those to the file, we need to first upload all 1 million and then download in one spring app context.
+         */
+        productStreamClient
+                .uploadProducts(productModelFlux)
+                .doOnNext(onNext())
+                .thenMany(productStreamClient.downloadProducts())
+                .map(Record::toString)
+                .as(content -> FileWriter.create(content, Path.of("src/test/resources/products.txt")))
+                .then()
+                .as(StepVerifier::create)
+                .expectComplete()
+                .verify();
+    }
 }
