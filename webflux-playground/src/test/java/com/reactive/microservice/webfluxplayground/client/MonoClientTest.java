@@ -2,7 +2,7 @@ package com.reactive.microservice.webfluxplayground.client;
 
 import com.reactive.microservice.webfluxplayground.AbstractWebClient;
 import com.reactive.microservice.webfluxplayground.client.model.CalculatorResponse;
-import com.reactive.microservice.webfluxplayground.client.model.Product;
+import com.reactive.microservice.webfluxplayground.model.Product;
 import com.reactive.microservice.webfluxplayground.util.TestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

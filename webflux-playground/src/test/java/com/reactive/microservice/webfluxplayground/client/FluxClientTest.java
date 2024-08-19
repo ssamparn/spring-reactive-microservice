@@ -1,7 +1,7 @@
 package com.reactive.microservice.webfluxplayground.client;
 
 import com.reactive.microservice.webfluxplayground.AbstractWebClient;
-import com.reactive.microservice.webfluxplayground.client.model.Product;
+import com.reactive.microservice.webfluxplayground.model.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;

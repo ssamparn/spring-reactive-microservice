@@ -1,7 +1,6 @@
 package com.reactive.microservice.webfluxplayground.repository;
 
 import com.reactive.microservice.webfluxplayground.AbstractTest;
-import com.reactive.microservice.webfluxplayground.repository.CustomerOrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
