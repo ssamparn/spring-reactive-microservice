@@ -9,8 +9,8 @@ CREATE TABLE customer (
 
 CREATE TABLE portfolio_item (
     id int AUTO_INCREMENT primary key,
-    customer_id int,
-    ticker VARCHAR(10),
+    customer_id int, -- customer_id can be 1, 2, 3
+    ticker VARCHAR(10), -- ticker is basically stock name e.g: GOOGLE, APPLE, AMAZON, MICROSOFT. We will consider these 4 stocks only.
     quantity int,
     foreign key (customer_id) references customer(id)
 );

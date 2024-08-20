@@ -1,10 +1,10 @@
-package com.reactive.microservice.customerservice;
+package com.reactive.microservice.customerportfolio;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CustomerServiceApplicationTests {
+class CustomerPortfolioApplicationTests {
 
     @Test
     void contextLoads() {

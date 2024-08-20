@@ -18,6 +18,6 @@
 
     <modules>
         <module>aggregator-service</module>
-        <module>customer-service</module>
+        <module>portfolio-service</module>
     </modules>
 </project>
