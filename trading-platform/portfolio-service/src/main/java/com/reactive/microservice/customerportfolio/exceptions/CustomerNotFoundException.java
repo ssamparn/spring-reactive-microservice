@@ -1,4 +1,4 @@
-package com.reactive.microservice.webfluxplayground.exceptions;
+package com.reactive.microservice.customerportfolio.exceptions;
 
 public class CustomerNotFoundException extends RuntimeException {
 
@@ -7,5 +7,4 @@ public class CustomerNotFoundException extends RuntimeException {
     public CustomerNotFoundException(Integer customerId) {
         super(MESSAGE.formatted(customerId));
     }
-
 }
