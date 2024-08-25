@@ -1,21 +1,60 @@
 package com.reactive.microservice.customerportfolio.service;
 
+import com.reactive.microservice.customerportfolio.entity.Customer;
+import com.reactive.microservice.customerportfolio.entity.PortfolioItem;
+import com.reactive.microservice.customerportfolio.exceptions.ApplicationException;
+import com.reactive.microservice.customerportfolio.mapper.EntityModelMapper;
+import com.reactive.microservice.customerportfolio.model.Holding;
+import com.reactive.microservice.customerportfolio.model.response.CustomerInformationResponse;
+import com.reactive.microservice.customerportfolio.repository.CustomerPortfolioRepository;
+import com.reactive.microservice.customerportfolio.repository.PortfolioItemRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class CustomerPortfolioService {
 
+    private final CustomerPortfolioRepository customerPortfolioRepository;
+    private final PortfolioItemRepository portfolioItemRepository;
+    private final EntityModelMapper entityModelMapper;
+
     /* *
-     * Trade Action BUY or SELL
-     *    BUY:
-     *     - If the customer has enough balance (retrieved from customer table), BUY will be executed.
-     *     - Debit amount from customer balance (update customer table)
-     *     - Add an entry in the portfolio_item table (insert a new record of the customer portfolio) if no record found
-     *     - Increase the quantity in the portfolio_item table (update if a record is found)
-     *
-     *    SELL:
-     *     - If the customer owns the stock (portfolio_item table has the customer stock information), SELL will be executed.
-     *     - Credit amount in the customer balance (update customer table with the updated balance)
-     *     - Decrease or Deduct the quantity sold in the portfolio_item table
+     * Approach 1: Plain and Simple Approach
      * */
+    public Mono<CustomerInformationResponse> getCustomerInformationApproach1(Integer customerId) {
+        return this.customerPortfolioRepository.findById(customerId)
+                .switchIfEmpty(ApplicationException.customerNotFound(customerId))
+                .flatMap(this::buildCustomerInformationResponse);
+    }
+
+    private Mono<CustomerInformationResponse> buildCustomerInformationResponse(Customer customerEntity) {
+        return this.portfolioItemRepository.findAllByCustomerId(customerEntity.getId())
+                .collectList()
+                .map(portfolioItems -> this.entityModelMapper.toCustomerInformationResponse(customerEntity, portfolioItems));
+    }
+
+
+    /* *
+     * Approach 2: Mono.zip() approach
+     * */
+    public Mono<CustomerInformationResponse> getCustomerInformationApproach2(Integer customerId) {
+        Mono<Customer> customerMono = this.customerPortfolioRepository.findById(customerId)
+                .switchIfEmpty(ApplicationException.customerNotFound(customerId));
+
+        Flux<PortfolioItem> portfolioItemFlux = this.portfolioItemRepository.findAllByCustomerId(customerId);
+
+        return Mono.zip(customerMono, portfolioItemFlux.collectList(),
+                (customer, portfolioItems) -> new CustomerInformationResponse(
+                        customer.getId(),
+                        customer.getCustomerName(),
+                        customer.getBalance(),
+                        portfolioItems.stream()
+                                .map(portfolioItem -> new Holding(portfolioItem.getTicker(), portfolioItem.getQuantity()))
+                                .toList()));
+    }
 }

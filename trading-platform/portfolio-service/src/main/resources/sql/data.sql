@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS portfolio_item;
+DROP TABLE IF EXISTS customer;
 
 CREATE TABLE customer (
     id int AUTO_INCREMENT primary key,
