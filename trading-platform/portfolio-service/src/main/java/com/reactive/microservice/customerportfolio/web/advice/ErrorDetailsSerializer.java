@@ -10,7 +10,7 @@ public class ErrorDetailsSerializer extends JsonSerializer<ErrorDetails> {
     @Override
     public void serialize(ErrorDetails errorDetails, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField("code", errorDetails.getErrorCode().toString());
+        jsonGenerator.writeStringField("code", errorDetails.getErrorCode());
         jsonGenerator.writeStringField("message", errorDetails.getErrorMessage());
         jsonGenerator.writeStringField("reference", errorDetails.getReferenceUrl());
         jsonGenerator.writeEndObject();
