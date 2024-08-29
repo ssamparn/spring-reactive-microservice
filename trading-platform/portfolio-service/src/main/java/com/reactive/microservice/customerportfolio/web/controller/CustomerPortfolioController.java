@@ -31,15 +31,10 @@ public class CustomerPortfolioController {
 
     /* *
      * GET call will be made by Aggregator Service to see the customer stock holdings / current portfolio when they access their profile.
-     *
      * GET /customers/{customerId} returns CustomerInformationResponse.
-     *
-     * CustomerInformationResponse (customerId, customerName, balance, List<Holdings>)
-     *
-     * Holding (ticker, quantity) => Retrieved from Portfolio Item Table.
-     *
+     * CustomerInformationResponse (Integer customerId, String customerName, Integer balance, List<Holdings> holdings)
+     * Holding (Ticker ticker, Integer quantity) => Retrieved from Portfolio Item Table.
      * Ticker => APPLE, GOOGLE, AMAZON, MICROSOFT
-     *
      * */
 
     @GetMapping("/{customerId}")
@@ -49,12 +44,9 @@ public class CustomerPortfolioController {
 
     /* *
      * POST call will be made by Aggregator Service to finish BUY or SELL of Trades.
-     *
      * POST /customers/{customerId}/trade received a StockTradeRequest & returns StockTradeResponse
-     *
-     * StockTradeRequest(ticker, price (current price of the ticker), quantity, traceAction (BUY or SELL)
-     *
-     * StockTradeResponse(customerId, ticker, price, quantity, traceAction, totalPrice (price * quantity), balance)
+     * StockTradeRequest(Ticker ticker, Integer price (current price of the ticker), Integer quantity, TradeAction traceAction (BUY or SELL)
+     * StockTradeResponse(Integer customerId, Ticker ticker, Integer price, Integer quantity, TradeAction traceAction, Integer totalPrice (price * quantity), Integer balance)
      * */
 
     @PostMapping("/{customerId}/trade")
