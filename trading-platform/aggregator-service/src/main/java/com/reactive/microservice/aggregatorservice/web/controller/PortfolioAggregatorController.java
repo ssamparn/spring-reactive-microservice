@@ -1,7 +1,7 @@
 package com.reactive.microservice.aggregatorservice.web.controller;
 
 import com.reactive.microservice.aggregatorservice.model.request.TradeRequest;
-import com.reactive.microservice.aggregatorservice.model.response.CustomerInformationResponse;
+import com.reactive.microservice.aggregatorservice.model.response.CustomerPortfolioResponse;
 import com.reactive.microservice.aggregatorservice.model.response.TradeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,12 +19,12 @@ public class PortfolioAggregatorController {
 
     /* *
      * GET call will be made by the browser to Aggregator Service to see customer stock holdings / current portfolio when they access their profile.
-     * GET http://localhost:8080/customers/{customerId} returns CustomerInformationResponse.
+     * GET http://localhost:8080/customers/{customerId} returns CustomerPortfolioResponse.
      * It calls to remote Customer Portfolio Service to endpoint http://localhost:6060/customers/{customerId}
-     * CustomerInformationResponse (Integer customerId, String customerName, Integer balance, List<Holdings> holdings)
+     * CustomerPortfolioResponse (Integer customerId, String customerName, Integer balance, List<Holdings> holdings)
      * */
     @GetMapping("/{customerId}")
-    public Mono<CustomerInformationResponse> getCustomerProfile(@PathVariable(name = "customerId") Integer customerId) {
+    public Mono<CustomerPortfolioResponse> getCustomerProfile(@PathVariable(name = "customerId") Integer customerId) {
         return Mono.empty();
     }
 

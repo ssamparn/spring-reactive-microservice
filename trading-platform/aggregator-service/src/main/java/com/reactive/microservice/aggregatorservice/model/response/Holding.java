@@ -4,5 +4,4 @@ import com.reactive.microservice.aggregatorservice.domain.Ticker;
 
 public record Holding(Ticker ticker,
                       Integer quantity) {
-
 }
