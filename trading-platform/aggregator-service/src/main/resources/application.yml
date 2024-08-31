@@ -3,3 +3,10 @@ server:
 spring:
   application:
     name: aggregator-service
+
+customer:
+  service:
+    url: http://localhost:6060
+stock:
+  service:
+    url: http://localhost:7070

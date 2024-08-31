@@ -1,17 +1,22 @@
 package com.reactive.microservice.aggregatorservice.web.controller;
 
+import com.reactive.microservice.aggregatorservice.client.StockServiceClient;
 import com.reactive.microservice.aggregatorservice.model.response.StockPriceStream;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
+@Slf4j
 @RestController
 @RequestMapping("/stock")
 @RequiredArgsConstructor
 public class StockPriceStreamController {
+
+    private final StockServiceClient stockServiceClient;
 
     /* *
      * GET call will be made by Browser to get a stream of stock price events.
@@ -23,10 +28,9 @@ public class StockPriceStreamController {
      * StockPriceStream (Ticker ticker, String price, LocalDateTime time)
      * */
 
-    @GetMapping(value = "/price-stream", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    @GetMapping(value = "/price-stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<StockPriceStream> getStockPriceStream() {
-        return Flux.empty();
+        log.info("updated stock price notification via sse");
+        return this.stockServiceClient.getStockPriceStream();
     }
-
-
 }

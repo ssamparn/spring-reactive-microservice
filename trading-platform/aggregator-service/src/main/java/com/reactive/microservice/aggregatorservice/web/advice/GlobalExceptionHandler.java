@@ -1,6 +1,7 @@
 package com.reactive.microservice.aggregatorservice.web.advice;
 
 import com.reactive.microservice.aggregatorservice.exceptions.CustomerNotFoundException;
+import com.reactive.microservice.aggregatorservice.exceptions.InvalidTradeRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +23,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setTitle("Customer not found !!");
         problemDetail.setType(URI.create("https://example.com/problems/user-not-found"));
         problemDetail.setProperty("errors", List.of(ErrorDetails.CUSTOMER_NOT_FOUND));
+        return problemDetail;
+    }
+
+    @ExceptionHandler(InvalidTradeRequestException.class)
+    protected ProblemDetail handleInvalidTradeRequest(InvalidTradeRequestException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+        problemDetail.setTitle("Invalid trade request !!");
+        problemDetail.setType(URI.create("https://example.com/problems/invalid-trade-request"));
+        problemDetail.setProperty("errors", List.of(ErrorDetails.INVALID_TRADE_REQUEST));
         return problemDetail;
     }
 }

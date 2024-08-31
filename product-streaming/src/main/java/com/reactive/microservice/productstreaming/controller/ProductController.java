@@ -22,7 +22,7 @@ import java.util.UUID;
  * Let's consider a use case where we have to create a Million products.
  *
  * If we are to do it in a traditional way, there will be many disadvantages. Like
- *  - Increased network traffic / latency as we have make POST call to the api million times. And imagine if the service provider applied a rate limiting plan, then they will throttle our requests.
+ *  - Increased network traffic / latency as we have to make POST call to the api million times. And imagine if the service provider applied a rate limiting plan, then they will throttle our requests.
  *    We can not open 1000's of threads to create products in parallel.
  *  - Unnecessary waiting time
  *  - Redundant validation (JWT Token Validation or SSL Certificate Validation)

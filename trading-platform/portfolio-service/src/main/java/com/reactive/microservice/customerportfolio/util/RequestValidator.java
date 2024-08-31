@@ -17,6 +17,6 @@ public class RequestValidator {
     }
 
     private static Predicate<Customer> hasEnoughBalance(Integer quantity, Integer tickerPrice) {
-        return customer -> customer.getBalance() > tickerPrice * quantity;
+        return customer -> customer.getBalance() >= tickerPrice * quantity;
     }
 }

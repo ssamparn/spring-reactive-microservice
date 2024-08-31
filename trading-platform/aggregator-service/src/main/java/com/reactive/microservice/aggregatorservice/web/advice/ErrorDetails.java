@@ -6,9 +6,8 @@ import lombok.Getter;
 @JsonSerialize(using = ErrorDetailsSerializer.class)
 public enum ErrorDetails {
 
-    CUSTOMER_NOT_FOUND("404-Customer-PortFolio", "Customer not found", "http://example.com/123"),
-    INSUFFICIENT_BALANCE("400-Customer-PortFolio", "Insufficient balance", "http://example.com/123"),
-    INSUFFICIENT_SHARES("400-Customer-PortFolio", "Insufficient shares", "http://example.com/123");
+    CUSTOMER_NOT_FOUND("404-Stock-Aggregator", "Customer not found", "http://example.com/123"),
+    INVALID_TRADE_REQUEST("400-Stock-Aggregator", "Invalid Trade Request", "http://example.com/123");
 
     @Getter
     private String errorCode;

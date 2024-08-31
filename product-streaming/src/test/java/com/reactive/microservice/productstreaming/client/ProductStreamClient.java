@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/**
+/* *
  * We will be using this client in our test class to upload 1 million products.
  * */
 public class ProductStreamClient {

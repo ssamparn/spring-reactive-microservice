@@ -88,6 +88,7 @@ public class ProductUploadDownloadTest {
         /* *
          * Since spring creates a new context each time a test starts, it writes only default number of products to the file.
          * If we have to download all 1 million products and write those to the file, we need to first upload all 1 million and then download in one spring app context.
+         * So before downloading all 1 million products, we have to upload all 1 million products.
          */
         productStreamClient
                 .uploadProducts(productModelFlux)
