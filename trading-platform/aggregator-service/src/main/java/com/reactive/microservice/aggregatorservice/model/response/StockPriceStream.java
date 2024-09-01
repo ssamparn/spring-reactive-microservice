@@ -9,6 +9,6 @@ import java.time.LocalDateTime;
  * 2. Represents the Stock price stream model provided to the browser.
  * */
 public record StockPriceStream(Ticker ticker,
-                               String price,
+                               Integer price,
                                LocalDateTime time) {
 }

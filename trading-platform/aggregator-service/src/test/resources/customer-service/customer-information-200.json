@@ -1,0 +1,11 @@
+{
+  "customerId": 1,
+  "customerName": "Sam",
+  "balance": 10000,
+  "holdings": [
+    {
+      "ticker": "GOOGLE",
+      "quantity": 2
+    }
+  ]
+}

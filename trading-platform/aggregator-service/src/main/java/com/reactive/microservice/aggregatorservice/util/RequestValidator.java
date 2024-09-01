@@ -22,15 +22,14 @@ public class RequestValidator {
     }
 
     private static Predicate<TradeRequest> hasTicker() {
-        return tradeRequest -> StringUtils.isNotEmpty(tradeRequest.ticker().toString());
+        return tradeRequest -> Objects.nonNull(tradeRequest.ticker()) && StringUtils.isNotEmpty(tradeRequest.ticker().toString());
     }
 
     private static Predicate<TradeRequest> isValidStockQuantity() {
         return tradeRequest -> Objects.nonNull(tradeRequest.quantity()) && tradeRequest.quantity() > 0;
     }
 
-
     private static Predicate<TradeRequest> hasTradeAction() {
-        return tradeRequest -> StringUtils.isNotEmpty(tradeRequest.tradeAction().toString());
+        return tradeRequest -> Objects.nonNull(tradeRequest.tradeAction()) && StringUtils.isNotEmpty(tradeRequest.tradeAction().toString());
     }
 }

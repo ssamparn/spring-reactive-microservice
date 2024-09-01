@@ -6,7 +6,8 @@ import com.reactive.microservice.aggregatorservice.dto.response.StockTradeRespon
 import com.reactive.microservice.aggregatorservice.exceptions.ApplicationException;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.reactive.function.client.WebClientResponseException.BadRequest;
+import org.springframework.web.reactive.function.client.WebClientResponseException.NotFound;
 import reactor.core.publisher.Mono;
 
 public class CustomerServiceClient {
@@ -25,9 +26,8 @@ public class CustomerServiceClient {
                 .uri("/customers/{customerId}", customerId)
                 .retrieve()
                 .bodyToMono(CustomerInformationResponse.class)
-                .onErrorResume(WebClientResponseException.NotFound.class, ex -> ApplicationException.customerNotFound(customerId));
+                .onErrorResume(NotFound.class, ex -> ApplicationException.customerNotFound(customerId));
     }
-
 
     /* *
      * POST http://localhost:6060/customers/{customerId}/trade
@@ -39,8 +39,8 @@ public class CustomerServiceClient {
                 .bodyValue(stockTradeRequest)
                 .retrieve()
                 .bodyToMono(StockTradeResponse.class)
-                .onErrorResume(WebClientResponseException.BadRequest.class, ApplicationException::handleBadRequest)
-                .onErrorResume(WebClientResponseException.NotFound.class, ex -> ApplicationException.customerNotFound(customerId));
+                .onErrorResume(NotFound.class, ex -> ApplicationException.customerNotFound(customerId))
+                .onErrorResume(BadRequest.class, ApplicationException::handleBadRequest);
     }
 
 }

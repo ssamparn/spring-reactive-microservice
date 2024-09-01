@@ -26,7 +26,7 @@ public class PortfolioAggregatorService {
 
     public Mono<TradeResponse> getStockTradeResponse(Integer customerId, TradeRequest tradeRequest) {
         return this.stockServiceClient.getStockPrice(tradeRequest.ticker())
-                .map(stockPriceResponse -> customerPortfolioMapper.toStockTradeRequest(Integer.valueOf(stockPriceResponse.price()), tradeRequest))
+                .map(stockPriceResponse -> customerPortfolioMapper.toStockTradeRequest(stockPriceResponse.price(), tradeRequest))
                 .flatMap(stockTradeRequest -> customerServiceClient.getStockTradeResponse(customerId, stockTradeRequest))
                 .map(customerPortfolioMapper::toTradeResponse);
     }
