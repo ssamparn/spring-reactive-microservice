@@ -4,6 +4,6 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    url: jdbc:postgresql://localhost:5432/customer
+    url: jdbc:postgresql://localhost:5432/customer-r2dbc-vs-jdbc
     username: postgres
-    password: secret
+    password: password

@@ -1,4 +1,4 @@
--- it can be part of the docker-compose init sql.
+-- it can be part of the docker-compose init.sql
 
 CREATE TABLE customer (
    id SERIAL PRIMARY KEY,

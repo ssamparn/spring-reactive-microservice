@@ -1,3 +1,7 @@
+/* *
+ * Commented because of usage of functional web to handle requests.
+ * */
+
 //package com.reactive.microservice.webfluxplayground.web.controller;
 //
 //import com.reactive.microservice.webfluxplayground.exceptions.ApplicationExceptions;
