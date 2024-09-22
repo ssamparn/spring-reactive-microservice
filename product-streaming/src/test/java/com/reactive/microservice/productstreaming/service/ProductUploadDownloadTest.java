@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static com.reactive.microservice.productstreaming.util.TestUtil.onNext;
 
-/**
+/* *
  * Configured to run test with complete spring context and against a defined port 8080.
  * This is to ensure mvn build runs successfully.
  * But for request streaming demo, start the application and run tests manually
