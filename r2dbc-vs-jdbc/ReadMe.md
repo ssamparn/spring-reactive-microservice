@@ -1,5 +1,5 @@
 ### Goal
-- Resource Efficiency: How much system resources they use.
+- Resource Efficiency: How much system resources each database drivers use.
 - Throughput: Number of tasks executed per unit time.
 
 #### Refer 

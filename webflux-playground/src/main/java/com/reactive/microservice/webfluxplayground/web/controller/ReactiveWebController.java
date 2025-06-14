@@ -18,7 +18,9 @@ public class ReactiveWebController {
                                                  .baseUrl("http://localhost:7070")
                                                  .build();
 
-    // sends streams of events to the console
+    /**
+     * Sends streams of events to the console
+     * */
     @GetMapping("/products")
     public Flux<Product> getProducts() {
         return this.webClient.get()
@@ -28,8 +30,10 @@ public class ReactiveWebController {
                              .doOnNext(p -> log.info("received event: {}", p));
     }
 
-    // sends streams of events to the console & browser. produces has been provided as MediaType.TEXT_EVENT_STREAM_VALUE
-    // for browser to understand the streaming events
+    /**
+     * Sends streams of events to the console & browser. produces has been provided as MediaType.TEXT_EVENT_STREAM_VALUE
+     * for browser to understand the streaming events
+     * */
     @GetMapping(value = "products/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Product> getProductsStream() {
         return this.webClient.get()
@@ -39,9 +43,11 @@ public class ReactiveWebController {
                              .doOnNext(p -> log.info("received event: {}", p));
     }
 
-    // Calling notorious product service.
-    // This works similar to product service, but it crashes after 4 seconds while emitting events.
-    // Make request to learn the behavior how reactive client handles the downstream service crash.
+    /**
+     * Calling notorious product service.
+     * This works similar to product service, but it crashes after 4 seconds while emitting events.
+     *  Make request to learn the behavior how reactive client handles the downstream service crash.
+     * */
     @GetMapping(value = "/products/notorious", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Product> getNotoriousProducts() {
         return this.webClient.get()
