@@ -17,7 +17,9 @@ public class RequestHandler {
     private final CustomerService customerService;
 
     public Mono<ServerResponse> allCustomers(ServerRequest serverRequest) {
-        return ServerResponse.ok().body(this.customerService.getAllCustomers(), CustomerModel.class);
+//        return ServerResponse.ok().body(this.customerService.getAllCustomers(), CustomerModel.class);
+        return this.customerService.getAllCustomers()
+                .as(customerFlux -> ServerResponse.ok().body(customerFlux, CustomerModel.class));
     }
 
     public Mono<ServerResponse> paginatedCustomers(ServerRequest serverRequest) {
@@ -25,14 +27,17 @@ public class RequestHandler {
         Integer size = serverRequest.queryParam("size").map(Integer::parseInt).orElse(3);
         return this.customerService.getAllCustomers(page, size)
                 .collectList()
-                .flatMap(customerModel -> ServerResponse.ok().body(Mono.just(customerModel), CustomerModel.class));
+//                .flatMap(customerModel -> ServerResponse.ok().body(Mono.just(customerModel), CustomerModel.class)); // using ServerResponse.body();
+//                .flatMap(customerModel -> ServerResponse.ok().bodyValue(customerModel)); // using ServerResponse.bodyValue();
+                .flatMap(ServerResponse.ok()::bodyValue); // using ServerResponse.bodyValue();
     }
 
     public Mono<ServerResponse> getCustomer(ServerRequest serverRequest) {
         Integer customerId = Integer.parseInt(serverRequest.pathVariable("customerId"));
         return this.customerService.getCustomerById(customerId)
                 .switchIfEmpty(ApplicationExceptions.customerNotFound(customerId))
-                .flatMap(customerModel -> ServerResponse.ok().body(Mono.just(customerModel), CustomerModel.class));
+//                .flatMap(customerModel -> ServerResponse.ok().body(Mono.just(customerModel), CustomerModel.class)); // using ServerResponse.body();
+                .flatMap(ServerResponse.ok()::bodyValue); // using ServerResponse.bodyValue();
     }
 
 
@@ -40,8 +45,8 @@ public class RequestHandler {
         return serverRequest.bodyToMono(CustomerModel.class)
                 .transform(RequestValidator.validate())
                 .as(this.customerService::saveCustomer)
-                .flatMap(customerModel -> ServerResponse.ok().body(Mono.just(customerModel), CustomerModel.class));
-
+//                .flatMap(customerModel -> ServerResponse.ok().body(Mono.just(customerModel), CustomerModel.class)); // using ServerResponse.body();
+                .flatMap(ServerResponse.ok()::bodyValue); // using ServerResponse.bodyValue();
     }
 
     public Mono<ServerResponse> updateCustomer(ServerRequest serverRequest) {

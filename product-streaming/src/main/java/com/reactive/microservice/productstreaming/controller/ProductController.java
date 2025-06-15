@@ -46,7 +46,11 @@ import java.util.UUID;
  *
  * JSON Line Format:
  *  - aka ND-JSON : new-line delimited
- *  - Each line id 1 JSON object, which is self-contained, easier to parse (without getting out-of-memory exception), great for streaming and can easily handle massive data sets.
+ *  - Each line is 1 JSON object, which is
+ *      - self-contained
+ *      - easier to parse (without getting out-of-memory exception)
+ *      - great for streaming
+ *      - can easily handle massive data sets.
  *  - JSON Array is good for smaller and related data. e.g: Reviews for a product, but for larger data sets JSON Line Format is recommended.
  * */
 

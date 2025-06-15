@@ -28,6 +28,5 @@ public class FunctionalExceptionHandler {
         problem.setTitle("Invalid Input");
         problem.setInstance(URI.create(serverRequest.path()));
         return ServerResponse.status(HttpStatus.BAD_REQUEST).body(Mono.just(problem), ProblemDetail.class);
-
     }
 }

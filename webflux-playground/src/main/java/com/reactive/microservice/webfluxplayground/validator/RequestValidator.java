@@ -20,6 +20,9 @@ public class RequestValidator {
         return customer -> !Objects.isNull(customer.email()) && Pattern.compile("^(.+)@(\\S+)$").matcher(customer.email()).matches();
     }
 
+    /**
+     * UnaryOperator<Mono<CustomerModel>> is same as Function<Mono<CustomerModel>, Mono<CustomerModel>>
+     * */
     public static UnaryOperator<Mono<CustomerModel>> validate() {
         return customerMono -> customerMono
                 .filter(hasName())

@@ -34,7 +34,7 @@ public class CustomerControllerTest extends AbstractTest {
     public void customerServiceInvalidAuthToken() {
         this.webTestClient.get()
                 .uri("/customers")
-                .headers(headers -> headers.add("x-auth-user", "random-token-valud"))
+                .headers(headers -> headers.add("x-auth-user", "random-token-value"))
                 .exchange()
                 .expectStatus().isUnauthorized();
     }

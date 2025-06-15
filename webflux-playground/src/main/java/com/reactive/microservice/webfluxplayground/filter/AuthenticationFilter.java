@@ -46,13 +46,13 @@ public class AuthenticationFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         log.info("authentication filter");
-        String authTokenValue = exchange.getRequest().getHeaders().getFirst(MANDATORY_HEADER); // authTokenValue can be either standard-secret or prime-secret
+        String authTokenValue = exchange.getRequest().getHeaders().getFirst(MANDATORY_HEADER); // authTokenValue can be either standard-secret or prime-secret.
         if (isNotEmpty(authTokenValue) && CUSTOMER_CATEGORY_MAP.containsKey(authTokenValue)) {
-            exchange.getAttributes().put("user-profile", CUSTOMER_CATEGORY_MAP.get(authTokenValue));
+            exchange.getAttributes().put("user-profile", CUSTOMER_CATEGORY_MAP.get(authTokenValue)); // setting the attribute value to be used in subsequent filters and controller.
             return chain.filter(exchange);
         }
 
          return Mono.fromRunnable(() -> exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED));
-        // return webFilterExceptionHandler.sendProblemDetail(exchange, HttpStatus.UNAUTHORIZED, "Mandatory request header missing"); // Use this in case we want to return a problem detail object from webflux web filter.
+//         return webFilterExceptionHandler.sendProblemDetail(exchange, HttpStatus.UNAUTHORIZED, "Mandatory request header missing"); // Use this in case we want to return a problem detail object from webflux web filter.
     }
 }
