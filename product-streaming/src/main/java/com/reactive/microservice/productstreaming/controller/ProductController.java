@@ -83,7 +83,7 @@ public class ProductController {
     }
 
     /* *
-     * Server Sent Events (SSE): We saw how we can stream events for Service => Service communication.
+     * Server Sent Events (SSE): We saw how we can stream events for Service <=> Service communication.
      * But what about Server to Browser Communication.
      *
      * Server Sent Events is the solution for streaming events from backend to frontend.
